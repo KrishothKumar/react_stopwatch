@@ -1,49 +1,49 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
   
-  const [mileSecond, setMileSecond] = useState(0)
-  const [second, setSecond] = useState(0)
-  const [minutes, setMinutes] = useState(0)
-  const [hours, setHours] = useState(0)
+  const [isStart, setIsStart] = useState(false)
+  const [mileSecond, setMileSecond] = useState(7195000) //
+  const [lap, setLap] = useState([])
 
-  const handleStart = () => {
-    setMileSecond()
-  }
-  
-  const calculateMileSecond = () =>{
 
-  }
-  
-  const calculateSecond = () =>{
-    
-  }
-  
-  const calculateMinutes = () =>{
-    
-  }
-  
-  const calculateHours = () =>{
-    
+  // setInterval(function(isStart){ isStart ? console.log("ddd"): ''}, 10)
+
+  function startWatch() {
+    setIsStart(setInterval(function(){ 
+      setMileSecond((mileSecond) => mileSecond + 10)
+    }, 10))
+  } 
+
+
+  function stopWatch() {
+    clearInterval(isStart)
   }
 
-  const handleStop = () => {
-    console.log('Stop')
+  const addLap = () =>{  
+      
   }
   
   const handleReset = () => {
+    stopWatch()
     setMileSecond(0)
-    setSecond(0)
-    setMinutes(0)
-    setHours(0)
+    setLap([])
   }
   return (
     <div className="App">
-      <p>{(hours > 0) ? `${hours} h`: null} {(hours > 0 || minutes > 0) ? `${minutes} m` : null } {second} s {mileSecond}</p>
-      <button onClick={handleStart}>Start</button>
-      <button onClick={handleStop}>Stop</button>
+      <p>
+        { (Math.floor((mileSecond/1000)/(60*60))%60 > 0) ? `${Math.floor((mileSecond/1000)/(60*60))%60} h `: null } 
+        { (Math.floor((mileSecond/1000)/60) > 0) ? `${Math.floor((mileSecond/1000)/60)%60} m ` : null } 
+        { `${Math.floor(mileSecond/1000)%60} s ` } 
+        { mileSecond%100 }
+      </p>
+      <button onClick={() => { startWatch() } }>Start</button>
+      <button onClick={() => { stopWatch() }}>Stop</button>
       <button onClick={handleReset}>Reset</button>
+      <button onClick={addLap}>Lap</button>
+      <p>{isStart}</p>
+      <p>{mileSecond}</p>
     </div>
   );
 }
