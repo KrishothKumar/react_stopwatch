@@ -4,29 +4,33 @@ import { useState, useEffect } from 'react';
 function App() {
   
   const [isStart, setIsStart] = useState(false)
-  const [mileSecond, setMileSecond] = useState(7195000) //
+  const [start, setStart] = useState(false)
+  const [mileSecond, setMileSecond] = useState(0)
   const [lap, setLap] = useState([])
 
 
   // setInterval(function(isStart){ isStart ? console.log("ddd"): ''}, 10)
 
   function startWatch() {
-    setIsStart(setInterval(function(){ 
+    setStart(setInterval(function(){ 
       setMileSecond((mileSecond) => mileSecond + 10)
     }, 10))
   } 
 
 
   function stopWatch() {
-    clearInterval(isStart)
+    clearInterval(start)
   }
 
-  const addLap = () =>{  
-      
+  const addLap = () => {  
+    const previousLap = lap.length == 0 ? lap[lap.length-1] : 0
+    const add = [{lap:lap.length, previousLap:previousLap, mileSecond:mileSecond}, ...lap]
+    setLap(add)
   }
   
   const handleReset = () => {
     stopWatch()
+    setIsStart(false)
     setMileSecond(0)
     setLap([])
   }
@@ -38,12 +42,20 @@ function App() {
         { `${Math.floor(mileSecond/1000)%60} s ` } 
         { mileSecond%100 }
       </p>
-      <button onClick={() => { startWatch() } }>Start</button>
-      <button onClick={() => { stopWatch() }}>Stop</button>
-      <button onClick={handleReset}>Reset</button>
-      <button onClick={addLap}>Lap</button>
-      <p>{isStart}</p>
-      <p>{mileSecond}</p>
+      <button style={ (isStart === true) ? {display: 'none'} : null} onClick={() => { startWatch(); setIsStart(true) }}>Start</button>
+      <button style={ (isStart == false) ? {display: 'none'} :  null} onClick={() => { stopWatch(); setIsStart(false) }}>Stop</button>
+      <button style={ (mileSecond == 0) ? {display: 'none'} :  null} onClick={handleReset}>Reset</button>
+      <button style={ (mileSecond == 0) ? {display: 'none'} :  null} onClick={addLap}>Lap</button>
+      
+      {lap.map((lap) => (
+          <p>
+            {`#${lap.lap + 1}  `}
+            {` ${Math.floor((lap.mileSecond/1000)/(60*60))%60} h `} 
+            {`${Math.floor((lap.mileSecond/1000)/60)%60} m `} 
+            { `${Math.floor(lap.mileSecond/1000)%60} s ` } 
+            { lap.mileSecond%100 } 
+          </p>
+      ))}      
     </div>
   );
 }
