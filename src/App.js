@@ -23,16 +23,16 @@ function App() {
     setIsStart(true)
     interval.current = setInterval(function(){ 
     setMileSecond((mileSecond) => mileSecond + 10)
-  }, 10)})
+  }, 10)}, [])
 
   const stopInterval = useCallback(() => {
     setIsStart(false)
     clearInterval(interval.current)
     interval.current = null
-  })
+  }, [])
 
   const addLap = () => {  
-    const previousLap = lap.length == 0 ? lap[lap.length-1] : 0
+    const previousLap = lap.length === 0 ? lap[lap.length-1] : 0
     const add = [{lap:lap.length, previousLap:previousLap, mileSecond:mileSecond}, ...lap]
     setLap(add)
   }
@@ -53,9 +53,9 @@ function App() {
         { mileSecond%100 }
       </p>
       <button style={ (isStart === true) ? {display: 'none'} : null} onClick={startInterval}>Start</button>
-      <button style={ (isStart == false) ? {display: 'none'} :  null} onClick={stopInterval}>Stop</button>
-      <button style={ (mileSecond == 0) ? {display: 'none'} :  null} onClick={handleReset}>Reset</button>
-      <button style={ (mileSecond == 0) ? {display: 'none'} :  null} onClick={addLap}>Lap</button>
+      <button style={ (isStart === false) ? {display: 'none'} :  null} onClick={stopInterval}>Stop</button>
+      <button style={ (mileSecond === 0) ? {display: 'none'} :  null} onClick={handleReset}>Reset</button>
+      <button style={ (mileSecond === 0) ? {display: 'none'} :  null} onClick={addLap}>Lap</button>
       
       {lap.map((lap) => (
           <p>
