@@ -1,11 +1,11 @@
 import './App.css';
-import { useState, useCallback, useRef } from 'react';
+import { useState, useRef } from 'react'; //useCallback,
 
 function App() {
   
   const [isStart, setIsStart] = useState(false)
   // const [start, setStart] = useState()
-  const [mileSecond, setMileSecond] = useState(60000)
+  const [mileSecond, setMileSecond] = useState(0)
   const [lap, setLap] = useState([])
   const interval = useRef(null)
   // var interval
@@ -25,20 +25,19 @@ function App() {
     // clearInterval(interval)
   }
 
-  const startInterval = useCallback(() => {
-    setIsStart(true)
-    interval.current = setInterval(function(){ 
-    setMileSecond((mileSecond) => mileSecond + 10)
-  }, 10)})
+  // const startInterval = useCallback(() => {
+  //   setIsStart(true)
+  //   interval.current = setInterval(function(){ 
+  //   setMileSecond((mileSecond) => mileSecond + 10)
+  // }, 10)}, [])
 
-  const stopInterval = useCallback(() => {
-    setIsStart(false)
-    clearInterval(interval.current)
-    interval.current = null
-  })
+  // const stopInterval = useCallback(() => {
+  //   setIsStart(false)
+  //   clearInterval(interval.current)
+  //   interval.current = null
+  // }, [])
 
   const addLap = () => {  
-    console.log(lap.length,lap)
     const previousLap = (lap.length > 0) ? lap[0].mileSecond : 0
     const add = [{lap:lap.length+1, previousLap:previousLap, mileSecond:mileSecond}, ...lap]
     setLap(add)
@@ -57,9 +56,9 @@ function App() {
         <p className='stop-watch'>{ `${Math.floor(mileSecond/1000)%60} s ` }</p> 
         <p className=''>{ mileSecond%100 }</p>
       <button style={ (isStart === true) ? {display: 'none'} : null} onClick={startWatch}>Start</button>
-      <button style={ (isStart == false) ? {display: 'none'} :  null} onClick={stopWatch}>Stop</button>
-      <button style={ (mileSecond == 0) ? {display: 'none'} :  null} onClick={handleReset}>Reset</button>
-      <button style={ (mileSecond == 0) ? {display: 'none'} :  null} onClick={addLap}>Lap</button>
+      <button style={ (isStart === false) ? {display: 'none'} :  null} onClick={stopWatch}>Stop</button>
+      <button style={ (mileSecond === 0) ? {display: 'none'} :  null} onClick={handleReset}>Reset</button>
+      <button style={ (mileSecond === 0) ? {display: 'none'} :  null} onClick={addLap}>Lap</button>
       
       {lap.map((lap) => (
           <p>
